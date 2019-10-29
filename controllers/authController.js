@@ -55,6 +55,17 @@ exports.logout = (req, res) => {
     res.status(200).json({msg: 'OK'})
 };
 
-exports.register = (req, res) => {
+exports.register = async (req, res) => {
+    if (!showIfErrors(req, res)) {
+        let data = req.body;
+        let originalPass = data.password;
 
+        await Users.create(data);
+
+        // Saving the original password again to request for authenticating the user at once
+        data.password = originalPass;
+        req.body = data;
+
+        this.login(req, res);
+    }
 };

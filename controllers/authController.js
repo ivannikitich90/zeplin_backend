@@ -1,6 +1,7 @@
 const sequelize = require('sequelize');
 const jwt = require('jsonwebtoken');
 const db = require('../models');
+const bcrypt = require('bcryptjs');
 const Users = db.users;
 
 const showIfErrors = require('../helpers/showIfErrors');
@@ -59,6 +60,7 @@ exports.register = async (req, res) => {
     if (!showIfErrors(req, res)) {
         let data = req.body;
         let originalPass = data.password;
+        data.password = bcrypt.hashSync(originalPass, 10);
 
         await Users.create(data);
 

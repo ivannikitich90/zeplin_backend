@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../models');
 const bcrypt = require('bcryptjs');
 const Users = db.users;
+const Roles = db.roles;
 
 const showIfErrors = require('../helpers/showIfErrors');
 
@@ -59,8 +60,16 @@ exports.logout = (req, res) => {
 exports.register = async (req, res) => {
     if (!showIfErrors(req, res)) {
         let data = req.body;
+
+        // Hashing user password to save in db
         let originalPass = data.password;
         data.password = bcrypt.hashSync(originalPass, 10);
+
+        // Getting selected role id
+        const role = await Roles.findOne({where: {name: data.role}, attributes: ['id']});
+        data.role_id = role.id;
+        data.status_id = 1;
+        delete data['role'];
 
         await Users.create(data);
 

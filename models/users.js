@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         // access_token: DataTypes.STRING
     }, {timestamps: false, underscored: true});
     users.associate = function (models) {
+        users.belongsTo(models.roles, {foreignKey: 'role_id'})
         // associations can be defined here
     };
     return users;

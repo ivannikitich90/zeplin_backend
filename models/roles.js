@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const roles = sequelize.define('roles', {
     name: DataTypes.STRING
-  }, {});
+  }, {timestamps:false});
   roles.associate = function(models) {
     // associations can be defined here
   };

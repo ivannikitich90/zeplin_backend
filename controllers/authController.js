@@ -25,7 +25,7 @@ exports.login = async (req, res) => {
         // Selecting an employee that has an email matching request one
         let user = await Users.findOne({
             attributes: attributes,
-            include: [{model:Roles}],
+            include: [{model: Roles, attributes: ['name']}],
             where: {email: email} //userTypeWhere
         }, res);
 
@@ -43,7 +43,7 @@ exports.login = async (req, res) => {
 
 
                 res.status(200).json({
-                    token: jwt.sign(details, 'secretkey', {expiresIn: '8h'}), user_id: user.id, full_name: full_name
+                    token: jwt.sign(details, 'secretkey', {expiresIn: '8h'}), full_name: full_name
                 })
             }
 
